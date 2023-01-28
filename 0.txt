@@ -1,0 +1,50 @@
+
+
+
+
+-----------會員資料-----------
+00. id* mongoDB會自動打
+1.圖片/  userImg
+2.會員名稱* name
+3.電子信箱(驗證格式)* email
+4.生日/ birthday
+5.手機號碼(驗證格式)* cellPhone
+6.帳號(不重複，不可改)* account 
+7.密碼* password
+8.清單 * list
+
+----------毛孩-----------
+圖片/ img
+體型* size
+毛色*(無) color
+動物品種* variety
+動物性別* gender(未知)
+動物類別*  kind
+入所日期*  opendate
+是否絕育*   sterilization
+年齡* age (未填寫)
+收容編號* subid
+是否開放認領養*  status
+
+公告收容所* place
+收容所電話* tel
+收容所地址* add
+
+--------收容所資料------------
+id* Seq  mongoDB會自動打
+收容所名稱*  shelterName -> place
+縣市名稱*  cityName
+地址*  Address
+電話*  tel
+開放時間*  openTime
+經度 lon
+緯度 lat  *(地圖
+
+-----------預約日期----------
+會員ID
+先抓到收容所id
+
+再跑到預約日期的資料裡 
+的預約時段(一小時1組
+設定一組1~5人
+
