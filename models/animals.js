@@ -10,7 +10,8 @@ const place = new Schema({
 
 const schema = new Schema({
   img: {
-    type: String
+    type: String,
+    default: 'https://i.imgur.com/yfhkJ0F.jpg'
   },
   // 體型
   size: {
@@ -67,9 +68,15 @@ const schema = new Schema({
     default: '未輸入'
   },
   // 公告收容所
-  ShelterName: {
+  shelterName: {
     type: [place],
     default: []
+  },
+  // 描述
+  remark: {
+    type: String,
+    default: '---'
   }
+
 }, { versionKey: false })
 export default model('animals', schema)

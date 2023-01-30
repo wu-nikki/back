@@ -1,4 +1,4 @@
-import products from '../models/products.js'
+import products from '../O-models/products.js'
 
 export const createProduct = async (req, res) => {
   try {

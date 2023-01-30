@@ -1,5 +1,5 @@
 import users from '../models/users.js'
-import animals from '../models/animals.js'
+import products from '../models/products.js'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req, res) => {
@@ -100,7 +100,7 @@ export const editCart = async (req, res) => {
       }
     } else {
       // 如果購物車內沒有此商品，檢查商品是否存在
-      const product = await animals.findById(req.body.p_id)
+      const product = await products.findById(req.body.p_id)
       // 如果不存在，回應 404
       if (!product || !product.sell) {
         res.status(404).send({ success: false, message: '找不到' })

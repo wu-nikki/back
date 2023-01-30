@@ -3,7 +3,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
 import userRoute from './routes/users.js'
-import animalsRoute from './routes/animals.js'
+import productRoute from './routes/products.js'
 import orderRoute from './routes/orders.js'
 
 import './passport/passport.js'
@@ -20,12 +20,12 @@ app.use(
     // callback(錯誤, 是否允許)
     origin (origin, callback) {
       // 允許github、localhost， postman等後端的請求會是undefined
-      // if (origin.includes('github') || origin.includes('localhost') || origin === undefined) {
-      callback(null, true)
-      // } else {
-      //   // 不允許， 跑至下面的錯誤區
-      //   callback(new Error(), false)
-      // }
+      if (origin.includes('github') || origin.includes('localhost') || origin === undefined) {
+        callback(null, true)
+      } else {
+        // 不允許， 跑至下面的錯誤區
+        callback(new Error(), false)
+      }
     }
   })
 )
@@ -40,7 +40,7 @@ app.use((_, req, res, next) => {
 })
 
 app.use('/users', userRoute)
-app.use('/animals', animalsRoute)
+app.use('/products', productRoute)
 
 app.use('/orders', orderRoute)
 

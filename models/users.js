@@ -2,57 +2,82 @@ import { Schema, model, ObjectId, Error } from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 
-const cartSchema = new Schema({
-  p_id: {
+const listSchema = new Schema({
+  a_id: {
     type: ObjectId,
-    ref: 'products',
-    required: [true, '缺少商品']
-  },
-  quantity: {
-    type: Number,
-    required: [true, '缺少數量']
+    ref: 'animals',
+    required: [true, '缺少a_id']
   }
 })
 
-const schema = new Schema(
-  {
-    account: {
-      type: String,
-      required: [true, '缺少帳號'],
-      minlength: [4, '帳號太短'],
-      maxlength: [20, '帳號太長'],
-      unique: true,
-      math: [/^[A-Za-z0-9]+$/, '帳號格式錯誤']
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    email: {
-      type: String,
-      required: [true, '缺少信箱'],
-      unique: true,
-      validator (email) {
-        return validator.isEmail(email)
-      },
-      message: '信箱格式錯誤'
-    },
-    tokens: {
-      type: [String],
-      default: []
-    },
-    cart: {
-      type: [cartSchema],
-      default: []
-    },
-    role: {
-      type: Number,
-      // 0=使用者，1=管理員
-      default: 0
-    }
+const schema = new Schema({
+  // 圖片
+  userImg: {
+    type: String
   },
-  { versionKey: false }
-)
+  // 名稱
+  name: {
+    type: String,
+    required: [true, '缺少名稱']
+  },
+  // 帳號
+  account: {
+    type: String,
+    required: [true, '缺少帳號'],
+    minlength: [4, '帳號太短'],
+    maxlength: [20, '帳號太長'],
+    unique: true,
+    math: [/^[A-Za-z0-9]+$/, '帳號格式錯誤']
+  },
+  // 密碼
+  password: {
+    type: String,
+    required: true
+  },
+  // 電子信箱
+  email: {
+    type: String,
+    required: [true, '缺少信箱'],
+    unique: true,
+    // 驗證格式
+    validator (email) {
+      return validator.isEmail(email)
+    },
+    message: '信箱格式錯誤'
+  },
+  birthday: {
+    type: Date
+  },
+  cellPhone: {
+    type: String,
+    required: [true, '缺少手機號碼'],
+    unique: true,
+    minlength: [10, '手機號碼要10碼'],
+    maxlength: [10, '手機號碼要10碼'],
+    math: [/^[0-9]+$/, '手機號碼錯誤']
+  },
+  tokens: {
+    type: [String],
+    // 預設箱子給裝資料
+    default: []
+  },
+  // 毛孩清單
+  list: {
+    type: [listSchema],
+    default: []
+  },
+  // 預約清單
+  dayList: {
+    type: [listSchema],
+    default: []
+  },
+  role: {
+    type: Number,
+    // 0=使用者，1=管理員
+    default: 0
+  }
+},
+{ versionKey: false })
 
 schema.pre('save', function (next) {
   const user = this
