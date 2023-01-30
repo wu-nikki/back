@@ -1,4 +1,4 @@
-import orders from '../models/dayList.js'
+import orders from '../models/reserveList.js'
 import users from '../models/users.js'
 
 export const createOrder = async (req, res) => {

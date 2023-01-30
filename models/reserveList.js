@@ -27,4 +27,4 @@ const schema = new Schema({
     default: Date.now
   }
 }, { versionKey: false })
-export default model('orders', schema)
+export default model('reserveList', schema)

@@ -1,13 +1,5 @@
 import { model, Schema, ObjectId } from 'mongoose'
 
-const place = new Schema({
-  place_id: {
-    type: ObjectId,
-    ref: 'shelter',
-    required: [true, '缺少place_id']
-  }
-})
-
 const schema = new Schema({
   img: {
     type: String,
@@ -69,8 +61,9 @@ const schema = new Schema({
   },
   // 公告收容所
   shelterName: {
-    type: [place],
-    default: []
+    type: ObjectId,
+    ref: 'shelter',
+    required: [true, '缺少place_id']
   },
   // 描述
   remark: {

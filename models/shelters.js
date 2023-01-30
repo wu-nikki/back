@@ -37,4 +37,4 @@ const schema = new Schema({
   }
 
 }, { versionKey: false })
-export default model('animals', schema)
+export default model('shelters', schema)
