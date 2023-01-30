@@ -30,7 +30,7 @@ export const createAnimal = async (req, res) => {
           out.remark = animal.animal_remark === '' ? '---' : animal.animal_remark
           return out
         })
-        todayData = animals.create(msg)
+        todayData = animals.insertMany(msg)
       } catch (err) {
         return Error(err)
       }
