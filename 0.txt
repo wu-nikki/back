@@ -9,7 +9,7 @@
 6.帳號(不重複，不可改)* account 
 7.密碼* password
 8.毛孩清單 * list
-
+9.預約清單 *dayList
 ----------毛孩-----------
 圖片/ img
 體型* size
@@ -23,9 +23,8 @@
 收容編號* subid
 是否開放認領養*  status
 
-公告收容所* place
-收容所電話* tel
-收容所地址* add
+公告收容所* shelterName->place
+
 
 --------收容所資料------------
 id* Seq  mongoDB會自動打
