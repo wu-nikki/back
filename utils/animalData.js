@@ -5,9 +5,9 @@ import shelters from '../models/shelters.js'
 
 export default async () => {
   try {
-    const sheltersList = await shelters.find().select('place')
+    const sheltersList = await shelters.find()
     // {data} 直接把物件的key是data的取出來
-    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=5&$skip=0')
+    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=15&$skip=0')
 
     const msg = data.map(animal => {
       const out = {}
@@ -28,27 +28,30 @@ export default async () => {
 
       // 公告收容所
 
-      const index = sheltersList.findIndex((item) =>
-        item.place === animal.shelter_name
+      const index = sheltersList.findIndex(
+        (item) => {
+          const find = (item.place === animal.shelter_name)
+          // if (find) { console.log(item, animal, '--') }
+          return (find) || (animal.shelter_address.includes(item.add))
+        }
       )
 
       if (index !== -1) {
         out.shelterName = sheltersList[index]._id
       } else {
+        // console.log(animal)
         out.shelterName = ''
       }
 
-      // out.shelterName = shelters.find(aa => aa.place === animal.shelter_name)._id
       // 描述
       out.remark = animal.animal_remark === '' ? '---' : animal.animal_remark
       return out
     })
 
     const newMeg = msg.filter((item) => item.shelterNamed !== '')
-    console.log(newMeg)
 
-    // await animals.insertMany(msg)
-    // console.log(msg)
+    const result = await animals.create(newMeg)
+    console.log(result)
   } catch (err) {
     console.log(err)
     return Error(err)

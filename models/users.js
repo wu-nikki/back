@@ -2,14 +2,6 @@ import { Schema, model, ObjectId, Error } from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 
-const listSchema = new Schema({
-  a_id: {
-    type: ObjectId,
-    ref: 'animals',
-    required: [true, '缺少a_id']
-  }
-})
-
 const schema = new Schema({
   // 圖片
   userImg: {
@@ -63,12 +55,13 @@ const schema = new Schema({
   },
   // 毛孩清單
   list: {
-    type: [listSchema],
+    type: [String],
+    // 預設箱子給裝資料
     default: []
   },
   // 預約清單
   dayList: {
-    type: [listSchema],
+    type: [String],
     default: []
   },
   role: {
