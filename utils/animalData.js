@@ -1,11 +1,14 @@
 import axios from 'axios'
 import animals from '../models/animals.js'
+import shelters from '../models/shelters.js'
 // 1.建立一個整理過的資料
 
 export default async () => {
   try {
+    const sheltersList = await shelters.find().select('place')
     // {data} 直接把物件的key是data的取出來
     const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=5&$skip=0')
+
     const msg = data.map(animal => {
       const out = {}
       out.img = animal.album_file
@@ -22,14 +25,30 @@ export default async () => {
       out.subid = animal.animal_subid
       // 是否開放認領養
       out.status = animal.animal_status === 'OPEN' ? '開放認養' : animal.animal_status === 'ADOPTED' ? '已認養' : animal.animal_status === 'OTHER' ? '其他' : animal.animal_status === 'NONE' ? '未公告' : '回天堂了..'
+
       // 公告收容所
-      out.shelterName = animal.shelter_name
+
+      const index = sheltersList.findIndex((item) =>
+        item.place === animal.shelter_name
+      )
+
+      if (index !== -1) {
+        out.shelterName = sheltersList[index]._id
+      } else {
+        out.shelterName = ''
+      }
+
+      // out.shelterName = shelters.find(aa => aa.place === animal.shelter_name)._id
       // 描述
       out.remark = animal.animal_remark === '' ? '---' : animal.animal_remark
       return out
     })
-    console.log(msg)
-    await animals.insertMany(msg)
+
+    const newMeg = msg.filter((item) => item.shelterNamed !== '')
+    console.log(newMeg)
+
+    // await animals.insertMany(msg)
+    // console.log(msg)
   } catch (err) {
     console.log(err)
     return Error(err)

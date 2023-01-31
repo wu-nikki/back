@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose'
+
 const schema = new Schema({
   // 公告收容所
   place: {

@@ -28,11 +28,11 @@ const schema = new Schema({
   // 動物類別
   kind: {
     type: String,
-    default: '未輸入類別',
-    enum: {
-      values: ['貓', '狗', '其他', '未輸入類別'],
-      message: '類別錯誤'
-    }
+    required: [true, '缺少分類']
+    // enum: {
+    //   values: ['貓', '狗', '其他', '未輸入類別'],
+    //   message: '類別錯誤'
+    // }
   },
   // 入所日期
   opendate: {
@@ -62,8 +62,8 @@ const schema = new Schema({
   // 公告收容所
   shelterName: {
     type: ObjectId,
-    ref: 'shelter',
-    required: [true, '缺少place_id']
+    ref: 'shelters',
+    required: [true, '缺少_id']
   },
   // 描述
   remark: {
