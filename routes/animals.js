@@ -3,12 +3,12 @@ import content from '../middleware/content.js'
 import admin from '../middleware/admin.js'
 import upload from '../middleware/upload.js'
 import { jwt } from '../middleware/auth.js'
-import { createAnimal, getAllAnimals, getAnimal, getSellAnimals, editAnimal } from '../controllers/animals.js'
+import { getAllAnimals, getAnimal, editAnimal } from '../controllers/animals.js'
 
 const router = Router()
 
-router.post('/', content('multipart/form-data'), jwt, admin, upload, createAnimal)
-router.get('/', getSellAnimals)
+// router.post('/', content('multipart/form-data'), jwt, admin, upload, createAnimal)
+// router.get('/', getSellAnimals)
 router.get('/all', jwt, admin, getAllAnimals)
 router.get('/:id', getAnimal)
 router.patch('/:id', content('multipart/form-data'), jwt, admin, upload, editAnimal)

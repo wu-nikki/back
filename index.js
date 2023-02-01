@@ -25,12 +25,12 @@ app.use(
     // callback(錯誤, 是否允許)
     origin (origin, callback) {
       // 允許github、localhost， postman等後端的請求會是undefined
-      // if (origin.includes('github') || origin.includes('localhost') || origin === undefined) {
-      callback(null, true)
-      // } else {
-      //   // 不允許， 跑至下面的錯誤區
-      //   callback(new Error(), false)
-      // }
+      if (origin === undefined || origin.includes('github') || origin.includes('localhost')) {
+        callback(null, true)
+      } else {
+        // 不允許， 跑至下面的錯誤區
+        callback(new Error(), false)
+      }
     }
   })
 )
