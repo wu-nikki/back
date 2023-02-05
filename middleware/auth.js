@@ -29,7 +29,7 @@ export const jwt = (req, res, next) => {
       if (info instanceof jsonwebtoken.JsonWebTokenError) {
         return res.status(401).json({ success: false, message: 'JWT 錯誤' })
       } else {
-        return res.status(401).json({ success: false, message: info.message || '未知錯誤' })
+        return res.status(500).json({ success: false, message: info.message || '未知錯誤' })
       }
     }
     req.user = data.user
