@@ -6,7 +6,9 @@ import { jwt } from '../middleware/auth.js'
 import { getAllAnimals, getAnimal, editAnimal } from '../controllers/animals.js'
 
 const router = Router()
-
+// console.log(getAllAnimals)
+// console.log(getAnimal)
+// console.log('editAnimal')
 // router.post('/', content('multipart/form-data'), jwt, admin, upload, createAnimal)
 // router.get('/', getSellAnimals)
 router.get('/all', jwt, admin, getAllAnimals)

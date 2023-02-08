@@ -51,7 +51,7 @@ export default async () => {
     const newMeg = msg.filter((item) => item.shelterNamed !== '')
 
     const result = await animals.create(newMeg)
-    console.log(result)
+    // console.log(result)
   } catch (err) {
     console.log(err)
     return Error(err)
