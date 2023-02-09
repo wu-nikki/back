@@ -3,7 +3,7 @@ import { model, Schema, ObjectId } from 'mongoose'
 const schema = new Schema({
   img: {
     type: String,
-    default: 'https://i.imgur.com/yfhkJ0F.jpg'
+    default: ''
   },
   // 體型
   size: {

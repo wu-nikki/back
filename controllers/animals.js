@@ -1,18 +1,17 @@
 import animals from '../models/animals.js'
 
-// 商品狀態
-
-// 全部商品
-export const getAllAnimals = async (req, res) => {
+// 全部動物
+export const getAnimals = async (req, res) => {
   try {
     const result = await animals.find()
+    console.log(result)
     res.status(200).json({ success: true, message: '', result })
   } catch (error) {
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
 
-// 商品
+// 個別動物
 export const getAnimal = async (req, res) => {
   try {
     const result = await animals.findById(req.params.id)
@@ -30,7 +29,7 @@ export const getAnimal = async (req, res) => {
   }
 }
 
-// 編輯商品
+// 編輯動物
 export const editAnimal = async (req, res) => {
   try {
     const result = await animals.findByIdAndUpdate(req.params.id, {

@@ -11,7 +11,7 @@ export default async () => {
 
     const msg = data.map(animal => {
       const out = {}
-      out.img = animal.album_file
+      out.img = animal.album_file === '' ? 'https://i.imgur.com/yfhkJ0F.jpg' : animal.album_file
       out.size = animal.animal_bodytype === 'SMALL' ? '小型' : (animal.animal_bodytype === 'MEDIUM' ? '中型' : '大型')
       out.color = animal.animal_colour
       out.variety = (animal.animal_Variety.includes('混種貓') || (animal.animal_Variety.includes('混種犬')) || (animal.animal_Variety.includes('混種狗'))) ? '米克斯' : animal.animal_Variety.trim()
@@ -57,3 +57,5 @@ export default async () => {
     return Error(err)
   }
 }
+// 先建好models.shelter (資料格式) ，import進 utils.shelterData
+// 利用utils.shelterData   裡面的AXIOS去抓資料，並.map資料來加工  再用models.shelter 存進資料庫
