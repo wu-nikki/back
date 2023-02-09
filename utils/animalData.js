@@ -11,7 +11,7 @@ export default async () => {
 
     const msg = data.map(animal => {
       const out = {}
-      out.img = animal.album_file === '' ? 'https://i.imgur.com/yfhkJ0F.jpg' : animal.album_file
+      out.img = animal.album_file
       out.size = animal.animal_bodytype === 'SMALL' ? '小型' : (animal.animal_bodytype === 'MEDIUM' ? '中型' : '大型')
       out.color = animal.animal_colour
       out.variety = (animal.animal_Variety.includes('混種貓') || (animal.animal_Variety.includes('混種犬')) || (animal.animal_Variety.includes('混種狗'))) ? '米克斯' : animal.animal_Variety.trim()
@@ -48,10 +48,11 @@ export default async () => {
       return out
     })
 
-    const newMeg = msg.filter((item) => item.shelterNamed !== '')
+    const newMeg = msg.filter((item) => item.shelterName !== '')
 
     const result = await animals.create(newMeg)
     // console.log(result)
+    // console.log('animalsdata')
   } catch (err) {
     console.log(err)
     return Error(err)

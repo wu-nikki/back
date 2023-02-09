@@ -10,7 +10,7 @@ const router = Router()
 // console.log(getAnimal)
 // console.log('editAnimal')
 // router.post('/', content('multipart/form-data'), jwt, admin, upload, createAnimal)
-// router.get('/', getSellAnimals)
+
 router.get('/', getAnimals)
 router.get('/:id', getAnimal)
 router.patch('/:id', content('multipart/form-data'), jwt, admin, upload, editAnimal)
