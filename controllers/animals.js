@@ -11,7 +11,7 @@ export const getAnimals = async (req, res) => {
     const result = await animals.find().populate({ path: 'shelterName', select: 'place' })
     // .populate('shelters.place')
     // .populate({ path: 'shelterName', select: 'place' })
-    console.log(result)
+    // console.log(result)
 
     res.status(200).json({ success: true, message: '', result })
   } catch (error) {

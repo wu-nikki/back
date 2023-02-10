@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
 
-import animalData from './utils/animalData.js'
+// import animalData from './utils/animalData.js'
 // import shelterData from './utils/shelterData.js'
 import cors from 'cors'
 import userRoute from './routes/users.js'
@@ -16,7 +16,7 @@ mongoose.connect(process.env.DB_URL)
 
 const app = express()
 // shelterData()
-animalData()
+// animalData()
 
 // 跨域請求設定
 app.use(

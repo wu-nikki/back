@@ -7,7 +7,7 @@ export default async () => {
   try {
     const sheltersList = await shelters.find()
     // {data} 直接把物件的key是data的取出來
-    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=15&$skip=0')
+    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=100&$skip=0')
 
     const msg = data.map(animal => {
       const out = {}
