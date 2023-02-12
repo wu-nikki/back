@@ -10,7 +10,6 @@ export const register = async (req, res) => {
       password: req.body.password,
       cellPhone: req.body.cellPhone,
       email: req.body.email
-
     })
     res.status(200).json({ success: true, message: '' })
   } catch (error) {
@@ -37,7 +36,7 @@ export const login = async (req, res) => {
         token,
         name: req.user.name,
         account: req.user.account,
-        list: req.user.list,
+        likeAnimalsList: req.user.likeAnimalsList,
         dayList: req.user.dayList,
         // cart: req.user.cart.reduce((total, current) => total + current.quantity, 0),
         role: req.user.role
@@ -83,11 +82,9 @@ export const getUser = async (req, res) => {
         cellPhone: req.user.cellPhone,
         email: req.user.email,
         birthday: req.user.birthday,
-        list: req.user.list,
+        likeAnimalsList: req.user.likeAnimalsList,
         dayList: req.user.dayList,
         role: req.user.role
-        // cart: req.user.cart.reduce((total, current) => total + current.quantity, 0),
-
       }
     })
   } catch (error) {
@@ -95,53 +92,41 @@ export const getUser = async (req, res) => {
   }
 }
 
-// // 購物車
-// export const editCart = async (req, res) => {
-//   try {
-//     // 找購物車有沒有此商品
-//     const idx = req.user.cart.findIndex(cart => cart.p_id.toString() === req.body.p_id)
-//     if (idx > -1) {
-//       // 如果有，檢查新數量是多少
-//       const quantity = req.user.cart[idx].quantity + parseInt(req.body.quantity)
-//       console.log(req.body.quantity)
-//       if (quantity <= 0) {
-//         // 如果新數量小於 0，從購物車陣列移除
-//         req.user.cart.splice(idx, 1)
-//       } else {
-//         // 如果新數量大於 0，修改購物車陣列數量
-//         req.user.cart[idx].quantity = quantity
-//       }
-//     } else {
-//       // 如果購物車內沒有此商品，檢查商品是否存在
-//       const product = await animals.findById(req.body.p_id)
-//       // 如果不存在，回應 404
-//       if (!product || !product.sell) {
-//         res.status(404).send({ success: false, message: '找不到' })
-//         return
-//       }
-//       // 如果存在，加入購物車陣列
-//       req.user.cart.push({
-//         p_id: req.body.p_id,
-//         quantity: parseInt(req.body.quantity)
-//       })
-//     }
-//     await req.user.save()
-//     res.status(200).json({ success: true, message: '', result: req.user.cart.reduce((total, current) => total + current.quantity, 0) })
-//   } catch (error) {
-//     if (error.name === 'ValidationError') {
-//       res.status(400).json({ success: false, message: error.errors[Object.keys(error.errors)[0]].message })
-//     } else {
-//       res.status(500).json({ success: false, message: '未知錯誤' })
-//     }
-//   }
-// }
+// 增加至毛孩收藏
+export const addLikeAnimalsList = async (req, res) => {
+  try {
+    const idx = req.user.likeAnimalsList.findIndex(animalId => animalId.toString() === req.params.id)
+    if (idx >= 0) {
+      res.status(400).json({ success: false, message: '已增加到收藏' })
+    }
+    req.user.likeAnimalsList.push(req.params.id)
+    await req.user.save()
+    res.status(200).json({ success: true, message: '', result: '' })
+  } catch (error) {
+    res.status(500).json({ success: false, message: '未知錯誤' })
+  }
+}
+// 將這毛孩的毛孩收藏刪除
+export const deleteLikeAnimalsList = async (req, res) => {
+  try {
+    const idx = req.user.likeAnimalsList.findIndex(animalId => animalId.toString() === req.params.id)
+    if (idx < 0) {
+      res.status(400).json({ success: false, message: '已刪除' })
+    }
+    req.user.likeAnimalsList.splice(idx, 1)
+    await req.user.save()
+    res.status(200).json({ success: true, message: '', result: '' })
+  } catch (error) {
+    res.status(500).json({ success: false, message: '未知錯誤' })
+  }
+}
 
-// //
-// export const getCart = async (req, res) => {
-//   try {
-//     const result = await users.findById(req.user._id, 'cart').populate('cart.p_id')
-//     res.status(200).json({ success: true, message: '', result: result.cart })
-//   } catch (error) {
-//     res.status(500).json({ success: false, message: '未知錯誤' })
-//   }
-// }
+// 取毛孩收藏
+export const getLikeAnimalsList = async (req, res) => {
+  try {
+    const result = await users.findById(req.user._id, 'likeAnimalsList').populate('likeAnimalsList')
+    res.status(200).json({ success: true, message: '', result: result.likeAnimalsList })
+  } catch (error) {
+    res.status(500).json({ success: false, message: '取不到毛孩收藏' })
+  }
+}

@@ -1,4 +1,4 @@
-import { Schema, model, Error } from 'mongoose'
+import { Schema, model, Error, ObjectId } from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 
@@ -55,8 +55,11 @@ const schema = new Schema(
       default: []
     },
     // 毛孩清單
-    list: {
-      type: [String],
+    likeAnimalsList: {
+      type: [{
+        type: ObjectId,
+        ref: 'animals'
+      }],
       // 預設箱子給裝資料
       default: []
     },
