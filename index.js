@@ -7,6 +7,8 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import userRoute from './routes/users.js'
 import animalsRoute from './routes/animals.js'
+import sheltersRoute from './routes/shelters.js'
+
 import orderRoute from './routes/orders.js'
 
 import './passport/passport.js'
@@ -47,6 +49,7 @@ app.use((_, req, res, next) => {
 
 app.use('/users', userRoute)
 app.use('/animals', animalsRoute)
+app.use('/shelters', sheltersRoute)
 
 app.use('/orders', orderRoute)
 

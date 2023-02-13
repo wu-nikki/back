@@ -8,7 +8,9 @@ export default async () => {
     const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=2thVboChxuKs')
     const msg = data.map(shelter => {
       const out = {}
+      out.seq = shelter.Seq
       out.place = shelter.ShelterName
+
       out.cityName = shelter.CityName
       out.tel = shelter.Phone
       out.add = shelter.Address
