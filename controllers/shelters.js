@@ -34,19 +34,20 @@ export const getShelter = async (req, res) => {
 export const editshelter = async (req, res) => {
   try {
     const imagePath = []
-    if (req.files.img) {
-      req.files.img.forEach((item) => {
-        imagePath.push(item.path)
-      })
-    }
+
     if (typeof req.body.img === 'string') {
       imagePath.push(req.body.img)
     }
     if (typeof req.body.img === 'object') {
-      req.body.img.forEach((item) => {
+      req.body.img.forEach(item => {
         if (item !== '' && item !== undefined && item !== null) {
           imagePath.push(item)
         }
+      })
+    }
+    if (req.files.img) {
+      req.files.img.forEach(item => {
+        imagePath.push(item.path)
       })
     }
     const result = await shelters.findByIdAndUpdate(
@@ -62,7 +63,6 @@ export const editshelter = async (req, res) => {
         openTime: req.body.openTime,
         lon: req.body.lon,
         lat: req.body.lat
-
       },
       { new: true }
     )
