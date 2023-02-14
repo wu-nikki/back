@@ -10,7 +10,7 @@ const schema = new Schema(
     },
 
     img: {
-      type: String,
+      type: [String],
       default: ''
     },
     // 公告收容所

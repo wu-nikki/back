@@ -33,11 +33,27 @@ export const getShelter = async (req, res) => {
 // 編輯收容所
 export const editshelter = async (req, res) => {
   try {
+    const imagePath = []
+    if (req.files.img) {
+      req.files.img.forEach((item) => {
+        imagePath.push(item.path)
+      })
+    }
+    if (typeof req.body.img === 'string') {
+      imagePath.push(req.body.img)
+    }
+    if (typeof req.body.img === 'object') {
+      req.body.img.forEach((item) => {
+        if (item !== '' && item !== undefined && item !== null) {
+          imagePath.push(item)
+        }
+      })
+    }
     const result = await shelters.findByIdAndUpdate(
       req.params.id,
       {
         seq: req.body.seq,
-        img: req.file?.path || '',
+        img: [...imagePath],
         place: req.body.place,
         cityName: req.body.cityName,
         tel: req.body.tel,
