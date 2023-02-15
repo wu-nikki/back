@@ -35,6 +35,12 @@ export const editshelter = async (req, res) => {
   try {
     const imagePath = []
 
+    if (req.files.img) {
+      req.files.img.forEach(item => {
+        imagePath.push(item.path)
+      })
+    }
+
     if (typeof req.body.img === 'string') {
       imagePath.push(req.body.img)
     }
@@ -45,11 +51,7 @@ export const editshelter = async (req, res) => {
         }
       })
     }
-    if (req.files.img) {
-      req.files.img.forEach(item => {
-        imagePath.push(item.path)
-      })
-    }
+
     const result = await shelters.findByIdAndUpdate(
       req.params.id,
       {

@@ -70,6 +70,16 @@ export const extend = async (req, res) => {
   }
 }
 // 使用者
+export const getAllUser = async (req, res) => {
+  try {
+    const result = await users.find()
+    res.status(200).json({ success: true, message: '', result })
+  } catch (error) {
+    res.status(500).json({ success: false, message: '未知錯誤' })
+  }
+}
+
+// 使用者
 export const getUser = async (req, res) => {
   try {
     res.status(200).json({
@@ -92,6 +102,41 @@ export const getUser = async (req, res) => {
   }
 }
 
+// 編輯會員資料 / 會員管理
+
+export const editUsers = async (req, res) => {
+  try {
+    const result = await users.findByIdAndUpdate(
+      req.params.id,
+      {
+        userImg: req.body.userImg,
+        name: req.body.name,
+        account: req.body.account,
+        cellPhone: req.body.cellPhone,
+        email: req.body.email,
+        birthday: req.body.birthday || ''
+      },
+      { new: true }
+    )
+
+    if (!result) {
+      res.status(404).json({ success: false, message: '找不到' })
+    } else {
+      res.status(200).json({ success: true, message: '', result })
+    }
+  } catch (error) {
+    console.log(error)
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ success: false, message: error.errors[Object.keys(error.errors)[0]].message })
+    } else if (error.name === 'CastError') {
+      res.status(404).json({ success: false, message: '找不到' })
+    } else {
+      res.status(500).json({ success: false, message: '未知錯誤' })
+    }
+  }
+}
+
+// -----------------------------
 // 增加至毛孩收藏
 export const addLikeAnimalsList = async (req, res) => {
   try {
