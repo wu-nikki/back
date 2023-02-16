@@ -26,6 +26,7 @@ export default (req, res, next) => {
   upload.fields([{ name: 'img', maxCount: 5 }])(req, res, (error) => {
     if (error instanceof multer.MulterError) {
       let message = '上傳錯誤'
+      console.log(error)
       if (error.code === 'LIMIT_FILE_SIZE') {
         message = '檔案太大'
       } else if (error.code === 'LIMIT_FILE_FORMAT') {

@@ -34,18 +34,15 @@ export const login = async (req, res) => {
       message: '',
       result: {
         token,
-        userImg: req.user.userImg,
         name: req.user.name,
         account: req.user.account,
-        cellPhone: req.user.cellPhone,
-        email: req.user.email,
-        birthday: req.user.birthday,
         likeAnimalsList: req.user.likeAnimalsList,
         dayList: req.user.dayList,
         role: req.user.role
       }
     })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
@@ -57,6 +54,7 @@ export const logout = async (req, res) => {
     await req.user.save()
     res.status(200).json({ success: true, message: '' })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
@@ -111,10 +109,29 @@ export const getUser = async (req, res) => {
 
 export const editUsers = async (req, res) => {
   try {
+    const imagePath = []
+
+    if (req.files.userImg) {
+      req.files.userImg.forEach(item => {
+        imagePath.push(item.path)
+      })
+    }
+
+    if (typeof req.body.userImg === 'string') {
+      imagePath.push(req.body.userImg)
+    }
+    if (typeof req.body.userImg === 'object') {
+      req.body.userImg.forEach(item => {
+        if (item !== '' && item !== undefined && item !== null) {
+          imagePath.push(item)
+        }
+      })
+    }
+
     const result = await users.findByIdAndUpdate(
       req.params.id,
       {
-        userImg: req.body.userImg,
+        userImg: [...imagePath],
         name: req.body.name,
         account: req.body.account,
         cellPhone: req.body.cellPhone,
