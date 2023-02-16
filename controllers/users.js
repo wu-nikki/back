@@ -34,11 +34,14 @@ export const login = async (req, res) => {
       message: '',
       result: {
         token,
+        userImg: req.user.userImg,
         name: req.user.name,
         account: req.user.account,
+        cellPhone: req.user.cellPhone,
+        email: req.user.email,
+        birthday: req.user.birthday,
         likeAnimalsList: req.user.likeAnimalsList,
         dayList: req.user.dayList,
-        // cart: req.user.cart.reduce((total, current) => total + current.quantity, 0),
         role: req.user.role
       }
     })
@@ -82,20 +85,22 @@ export const getAllUser = async (req, res) => {
 // 使用者
 export const getUser = async (req, res) => {
   try {
+    const result = await users.find()
     res.status(200).json({
       success: true,
       message: '',
-      result: {
-        userImg: req.user.userImg,
-        name: req.user.name,
-        account: req.user.account,
-        cellPhone: req.user.cellPhone,
-        email: req.user.email,
-        birthday: req.user.birthday,
-        likeAnimalsList: req.user.likeAnimalsList,
-        dayList: req.user.dayList,
-        role: req.user.role
-      }
+      result
+      // : {
+      //   userImg: req.user.userImg,
+      //   name: req.user.name,
+      //   account: req.user.account,
+      //   cellPhone: req.user.cellPhone,
+      //   email: req.user.email,
+      //   birthday: req.user.birthday,
+      //   likeAnimalsList: req.user.likeAnimalsList,
+      //   dayList: req.user.dayList,
+      //   role: req.user.role
+      // }
     })
   } catch (error) {
     res.status(500).json({ success: false, message: '未知錯誤' })

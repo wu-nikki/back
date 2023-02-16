@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     // 圖片
     userImg: {
-      type: String
+      type: [String]
     },
     // 名稱
     name: {
