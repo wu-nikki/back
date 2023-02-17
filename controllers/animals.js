@@ -23,7 +23,7 @@ export const getAnimals = async (req, res) => {
 // 個別動物
 export const getAnimal = async (req, res) => {
   try {
-    const result = await animals.findById(req.params.id)
+    const result = await animals.findById(req.params.id).populate({ path: 'shelterName' })
     if (!result) {
       res.status(404).json({ success: false, message: '找不到' })
     } else {

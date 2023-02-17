@@ -101,11 +101,66 @@ export const getUser = async (req, res) => {
       // }
     })
   } catch (error) {
+    console.log(error)
+
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
+// 會員管理
 
-// 編輯會員資料 / 會員管理
+export const editUser = async (req, res) => {
+  try {
+    const imagePath = []
+
+    if (req.files.userImg) {
+      req.files.userImg.forEach(item => {
+        imagePath.push(item.path)
+      })
+    }
+
+    if (typeof req.body.userImg === 'string') {
+      imagePath.push(req.body.userImg)
+    }
+    if (typeof req.body.userImg === 'object') {
+      req.body.userImg.forEach(item => {
+        if (item !== '' && item !== undefined && item !== null) {
+          imagePath.push(item)
+        }
+      })
+    }
+
+    const result = await users.findByIdAndUpdate(
+      req.params.id,
+      {
+        _id: req.body._id,
+        userImg: [...imagePath],
+        name: req.body.name,
+        account: req.body.account,
+        cellPhone: req.body.cellPhone,
+        email: req.body.email,
+        birthday: req.body.birthday || ''
+      },
+      { new: true }
+    )
+
+    if (!result) {
+      res.status(404).json({ success: false, message: '找不到' })
+    } else {
+      res.status(200).json({ success: true, message: '', result })
+    }
+  } catch (error) {
+    console.log(error)
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ success: false, message: error.errors[Object.keys(error.errors)[0]].message })
+    } else if (error.name === 'CastError') {
+      res.status(404).json({ success: false, message: '找不到' })
+    } else {
+      res.status(500).json({ success: false, message: '未知錯誤' })
+    }
+  }
+}
+
+// 編輯會員資料
 
 export const editUsers = async (req, res) => {
   try {
@@ -159,6 +214,7 @@ export const editUsers = async (req, res) => {
 }
 
 // -----------------------------
+
 // 增加至毛孩收藏
 export const addLikeAnimalsList = async (req, res) => {
   try {
@@ -170,6 +226,7 @@ export const addLikeAnimalsList = async (req, res) => {
     await req.user.save()
     res.status(200).json({ success: true, message: '', result: '' })
   } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
@@ -184,6 +241,16 @@ export const deleteLikeAnimalsList = async (req, res) => {
     await req.user.save()
     res.status(200).json({ success: true, message: '', result: '' })
   } catch (error) {
+    console.log(error)
+    res.status(500).json({ success: false, message: '未知錯誤' })
+  }
+}
+// 取毛孩收藏id
+export const getLikeAnimalsListById = (req, res) => {
+  try {
+    res.status(200).json({ success: true, message: '', result: req.user.likeAnimalsList.includes(req.params.id) })
+  } catch (error) {
+    console.log(error)
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
@@ -194,6 +261,8 @@ export const getLikeAnimalsList = async (req, res) => {
     const result = await users.findById(req.user._id, 'likeAnimalsList').populate('likeAnimalsList')
     res.status(200).json({ success: true, message: '', result: result.likeAnimalsList })
   } catch (error) {
+    console.log(error)
+
     res.status(500).json({ success: false, message: '取不到毛孩收藏' })
   }
 }
