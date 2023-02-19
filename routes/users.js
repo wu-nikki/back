@@ -2,7 +2,7 @@ import { Router } from 'express'
 import content from '../middleware/content.js'
 import admin from '../middleware/admin.js'
 // import { jwt } from '../middleware/auth.js'
-import upload from '../middleware/upload.js'
+import { uploadUserImg } from '../middleware/upload.js'
 
 import * as auth from '../middleware/auth.js'
 import {
@@ -16,7 +16,7 @@ import {
   editUsers,
   addLikeAnimalsList,
   deleteLikeAnimalsList,
-  getLikeAnimalsList, getLikeAnimalsListById
+  getLikeAnimalsList
 } from '../controllers/users.js'
 
 const router = Router()
@@ -37,10 +37,10 @@ router.get('/', auth.jwt, getAllUser)
 // 使用者
 router.get('/me', auth.jwt, getUser)
 //  會員管理自己的資料
-router.patch('/me/:id', content('multipart/form-data'), auth.jwt, upload, editUser)
+router.patch('/me', content('multipart/form-data'), auth.jwt, uploadUserImg, editUser)
 
 // 編輯會員資料
-router.patch('/:id', content('multipart/form-data'), auth.jwt, admin, upload, editUsers)
+router.patch('/:id', content('multipart/form-data'), auth.jwt, admin, uploadUserImg, editUsers)
 
 // ----------------------------------------------
 
@@ -48,9 +48,6 @@ router.patch('/:id', content('multipart/form-data'), auth.jwt, admin, upload, ed
 router.delete('/likeAnimalsList/:id', auth.jwt, deleteLikeAnimalsList)
 // 增加
 router.post('/likeAnimalsList/:id', auth.jwt, addLikeAnimalsList)
-
-// 取毛孩收藏id
-router.get('/likeAnimalsList/:id', auth.jwt, getLikeAnimalsListById)
 
 // 取毛孩收藏
 router.get('/likeAnimalsList', auth.jwt, getLikeAnimalsList)

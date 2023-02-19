@@ -6,7 +6,7 @@ const schema = new Schema(
   {
     // 圖片
     userImg: {
-      type: [String]
+      type: String
     },
     // 名稱
     name: {
@@ -47,7 +47,7 @@ const schema = new Schema(
       message: '信箱格式錯誤'
     },
     birthday: {
-      type: Date
+      type: String
     },
     tokens: {
       type: [String],

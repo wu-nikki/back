@@ -38,7 +38,8 @@ export const login = async (req, res) => {
         account: req.user.account,
         likeAnimalsList: req.user.likeAnimalsList,
         dayList: req.user.dayList,
-        role: req.user.role
+        role: req.user.role,
+        userImg: req.user.userImg
       }
     })
   } catch (error) {
@@ -83,7 +84,7 @@ export const getAllUser = async (req, res) => {
 // 使用者
 export const getUser = async (req, res) => {
   try {
-    const result = await users.find()
+    const result = await users.findById(req.user._id)
     res.status(200).json({
       success: true,
       message: '',
@@ -110,38 +111,32 @@ export const getUser = async (req, res) => {
 
 export const editUser = async (req, res) => {
   try {
-    const imagePath = []
+    let imagePath = ''
 
-    if (req.files.userImg) {
-      req.files.userImg.forEach(item => {
-        imagePath.push(item.path)
-      })
+    if (req.files.userImg?.length > 0) {
+      imagePath = req.files.userImg[0].path
     }
 
     if (typeof req.body.userImg === 'string') {
-      imagePath.push(req.body.userImg)
+      imagePath = req.body.userImg
     }
     if (typeof req.body.userImg === 'object') {
       req.body.userImg.forEach(item => {
         if (item !== '' && item !== undefined && item !== null) {
-          imagePath.push(item)
+          imagePath = item
         }
       })
     }
-
-    const result = await users.findByIdAndUpdate(
-      req.params.id,
-      {
-        _id: req.body._id,
-        userImg: [...imagePath],
-        name: req.body.name,
-        account: req.body.account,
-        cellPhone: req.body.cellPhone,
-        email: req.body.email,
-        birthday: req.body.birthday || ''
-      },
-      { new: true }
-    )
+    //
+    const result = await users.findByIdAndUpdate(req.user._id, {
+      _id: req.body._id,
+      userImg: imagePath,
+      name: req.body.name,
+      account: req.body.account,
+      cellPhone: req.body.cellPhone,
+      email: req.body.email,
+      birthday: req.body.birthday || ''
+    })
 
     if (!result) {
       res.status(404).json({ success: false, message: '找不到' })
@@ -164,29 +159,9 @@ export const editUser = async (req, res) => {
 
 export const editUsers = async (req, res) => {
   try {
-    const imagePath = []
-
-    if (req.files.userImg) {
-      req.files.userImg.forEach(item => {
-        imagePath.push(item.path)
-      })
-    }
-
-    if (typeof req.body.userImg === 'string') {
-      imagePath.push(req.body.userImg)
-    }
-    if (typeof req.body.userImg === 'object') {
-      req.body.userImg.forEach(item => {
-        if (item !== '' && item !== undefined && item !== null) {
-          imagePath.push(item)
-        }
-      })
-    }
-
     const result = await users.findByIdAndUpdate(
       req.params.id,
       {
-        userImg: [...imagePath],
         name: req.body.name,
         account: req.body.account,
         cellPhone: req.body.cellPhone,
@@ -220,7 +195,7 @@ export const addLikeAnimalsList = async (req, res) => {
   try {
     const idx = req.user.likeAnimalsList.findIndex(animalId => animalId.toString() === req.params.id)
     if (idx >= 0) {
-      res.status(400).json({ success: false, message: '已增加到收藏' })
+      return res.status(400).json({ success: false, message: '已增加到收藏' })
     }
     req.user.likeAnimalsList.push(req.params.id)
     await req.user.save()
@@ -235,7 +210,7 @@ export const deleteLikeAnimalsList = async (req, res) => {
   try {
     const idx = req.user.likeAnimalsList.findIndex(animalId => animalId.toString() === req.params.id)
     if (idx < 0) {
-      res.status(400).json({ success: false, message: '已刪除' })
+      return res.status(400).json({ success: false, message: '已刪除' })
     }
     req.user.likeAnimalsList.splice(idx, 1)
     await req.user.save()
@@ -245,21 +220,19 @@ export const deleteLikeAnimalsList = async (req, res) => {
     res.status(500).json({ success: false, message: '未知錯誤' })
   }
 }
-// 取毛孩收藏id
-export const getLikeAnimalsListById = (req, res) => {
-  try {
-    res.status(200).json({ success: true, message: '', result: req.user.likeAnimalsList.includes(req.params.id) })
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({ success: false, message: '未知錯誤' })
-  }
-}
 
 // 取毛孩收藏
 export const getLikeAnimalsList = async (req, res) => {
   try {
-    const result = await users.findById(req.user._id, 'likeAnimalsList').populate('likeAnimalsList')
-    res.status(200).json({ success: true, message: '', result: result.likeAnimalsList })
+    const result = await users.findById(req.user._id, 'likeAnimalsList').populate({ path: 'likeAnimalsList', populate: { path: 'shelterName', select: 'place' } })
+    console.log(result)
+    const addLovedLikeAnimalsList = result.likeAnimalsList.map(a => {
+      const newO = JSON.parse(JSON.stringify(a))
+      newO.loved = true
+      return newO
+    })
+
+    res.status(200).json({ success: true, message: '', result: addLovedLikeAnimalsList })
   } catch (error) {
     console.log(error)
 

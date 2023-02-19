@@ -12,7 +12,7 @@ import sheltersRoute from './routes/shelters.js'
 import orderRoute from './routes/orders.js'
 
 import './passport/passport.js'
-mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', true)
 mongoose.set('sanitizeFilter', true)
 mongoose.connect(process.env.DB_URL)
 

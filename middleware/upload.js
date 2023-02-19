@@ -22,8 +22,27 @@ const upload = multer({
   }
 })
 
-export default (req, res, next) => {
-  upload.fields([{ name: 'img', maxCount: 5 }])(req, res, (error) => {
+export const upload5Img = (req, res, next) => {
+  upload.fields([{ name: 'img', maxCount: 5 }])(req, res, error => {
+    if (error instanceof multer.MulterError) {
+      let message = '上傳錯誤'
+      console.log(error)
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        message = '檔案太大'
+      } else if (error.code === 'LIMIT_FILE_FORMAT') {
+        message = '檔案格式錯誤'
+      }
+      res.status(400).json({ success: false, message })
+    } else if (error) {
+      res.status(500).json({ success: false, message: '未知錯誤' })
+    } else {
+      next()
+    }
+  })
+}
+
+export const uploadUserImg = (req, res, next) => {
+  upload.fields([{ name: 'userImg', maxCount: 1 }])(req, res, error => {
     if (error instanceof multer.MulterError) {
       let message = '上傳錯誤'
       console.log(error)
