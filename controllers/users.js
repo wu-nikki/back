@@ -225,7 +225,7 @@ export const deleteLikeAnimalsList = async (req, res) => {
 export const getLikeAnimalsList = async (req, res) => {
   try {
     const result = await users.findById(req.user._id, 'likeAnimalsList').populate({ path: 'likeAnimalsList', populate: { path: 'shelterName', select: 'place' } })
-    console.log(result)
+    // console.log(result)
     const addLovedLikeAnimalsList = result.likeAnimalsList.map(a => {
       const newO = JSON.parse(JSON.stringify(a))
       newO.loved = true
