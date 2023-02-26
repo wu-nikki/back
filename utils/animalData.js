@@ -7,7 +7,7 @@ export default async () => {
   try {
     const sheltersList = await shelters.find()
     // {data} 直接把物件的key是data的取出來
-    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=200&$skip=0')
+    const { data } = await axios.get('https://data.coa.gov.tw/Service/OpenData/TransService.aspx?UnitId=QcbUEzN6E6DL&$top=1000&$skip=0')
 
     const msg = data.map(animal => {
       const out = {}
@@ -50,8 +50,8 @@ export default async () => {
 
     const newMeg = msg.filter((item) => item.shelterName !== '')
 
-    const result = await animals.create(newMeg)
-    // console.log(result)
+    await animals.create(newMeg)
+    console.log('Updated')
     // console.log('animalsdata')
   } catch (err) {
     console.log(err)

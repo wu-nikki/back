@@ -2,12 +2,13 @@ import 'dotenv/config'
 import express from 'express'
 import mongoose from 'mongoose'
 
-// import animalData from './utils/animalData.js'
+import animalData from './utils/animalData.js'
 // import shelterData from './utils/shelterData.js'
 import cors from 'cors'
 import userRoute from './routes/users.js'
 import animalsRoute from './routes/animals.js'
 import sheltersRoute from './routes/shelters.js'
+import schedule from 'node-schedule'
 
 import './passport/passport.js'
 mongoose.set('strictQuery', true)
@@ -16,8 +17,10 @@ mongoose.connect(process.env.DB_URL)
 
 const app = express()
 // shelterData()
-// animalData()
 
+schedule.scheduleJob('0 0 * * *', function () {
+  animalData()
+})
 // 跨域請求設定
 app.use(
   cors({
