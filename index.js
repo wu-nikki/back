@@ -10,7 +10,6 @@ import animalsRoute from './routes/animals.js'
 import sheltersRoute from './routes/shelters.js'
 
 import schedule from 'node-schedule'
-import https from 'https'
 
 import './passport/passport.js'
 mongoose.set('strictQuery', true)
@@ -65,9 +64,3 @@ app.all('*', (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
   console.log('伺服器啟動')
 })
-
-if (process.env.RENDER) {
-  setInterval(() => {
-    https.get(process.env.RENDER)
-  }, 1000 * 60 * 5)
-}
