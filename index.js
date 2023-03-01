@@ -8,7 +8,9 @@ import cors from 'cors'
 import userRoute from './routes/users.js'
 import animalsRoute from './routes/animals.js'
 import sheltersRoute from './routes/shelters.js'
+
 import schedule from 'node-schedule'
+import https from 'https'
 
 import './passport/passport.js'
 mongoose.set('strictQuery', true)
@@ -52,9 +54,9 @@ app.use('/users', userRoute)
 app.use('/animals', animalsRoute)
 app.use('/shelters', sheltersRoute)
 
-app.get('/', (req, res) => {
-  res.status(200).json({ success: true, message: '' })
-})
+// app.get('/', (req, res) => {
+//   res.status(200).json({ success: true, message: '' })
+// })
 
 app.all('*', (req, res) => {
   res.status(404).json({ success: false, message: '找不到' })
@@ -63,3 +65,9 @@ app.all('*', (req, res) => {
 app.listen(process.env.PORT || 4000, () => {
   console.log('伺服器啟動')
 })
+
+if (process.env.RENDER) {
+  setInterval(() => {
+    https.get(process.env.RENDER)
+  }, 1000 * 60 * 5)
+}
