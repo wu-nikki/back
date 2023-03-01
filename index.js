@@ -17,8 +17,8 @@ mongoose.connect(process.env.DB_URL)
 
 const app = express()
 // shelterData()
-
-schedule.scheduleJob('0 0 * * *', function () {
+//
+schedule.scheduleJob('0 0 0 * *', function () {
   animalData()
 })
 // 跨域請求設定
